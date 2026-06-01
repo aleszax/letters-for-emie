@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="eng">
+<head>
+<meta charset="UTF-8">
+<title>Letters to Emmie</title>
+
+<style>
+body {
+  margin: 0;
+  height: 100vh;
+  background: #dcecff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Courier New', monospace;
+  perspective: 1200px;
+}
+
+/* KOPERTA */
+.envelope {
+  position: relative;
+  width: 920px;
+  height: 640px;
+  background: #a3e2ff;
+  border-radius: 10px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+  cursor: pointer;
+  overflow: hidden;
+  transform-style: preserve-3d;
+  transition: transform 0.8s ease;
+}
+
+/* KLAPKA */
+.flap {
+  position: absolute;
+  width: 100%;
+  height: 50%;
+  background: #8fc5f8;
+  top: 0;
+  left: 0;
+  transform-origin: top;
+  transition: transform 0.8s ease;
+  z-index: 3;
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+}
+
+.open .flap {
+  transform: rotateX(180deg);
+}
+
+/* KARTKA — POPRAWIONA */
+.letter {
+  position: absolute;
+  width: 45%;
+  height: 85%;
+  background: #f4faff;
+  left: 25%;
+  top: 50%;
+  transform: translateY(60%);
+  padding: 25px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+  transition: transform 0.9s ease;
+  z-index: 2;
+  overflow-y: auto;
+  border-radius: 4px;
+}
+
+/* WYSUWANIE PROSTO */
+.open .letter {
+  transform: translateY(-55%);
+}
+
+/* TEKST */
+.text {
+  white-space: pre-line;
+  line-height: 1.6;
+  color: #2a3b4c;
+}
+
+/* MENU */
+.menu {
+  position: fixed;
+  left: 20px;
+  bottom: 20px;
+}
+
+.menu button {
+  display: block;
+  margin-bottom: 6px;
+  padding: 8px 12px;
+  background: #9fc3e6;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.attachments {
+    margin-top: 20px;
+  }
+
+  .stamp {
+    position: absolute;
+    width: 75px;
+    top: 12px;
+    right: 28px;
+    transform: none;
+    z-index: 1;
+  }
+
+  @keyframes float {
+    0% {
+      transform: translateY(0px) translateX(0px);
+      opacity: 1;
+    }
+    50% {
+      transform: translateY(-20px) translateX(10px);
+    }
+    100% {
+      transform: translateY(-40px) translateX(-10px);
+      opacity: 0;
+    }
+  }
+
+  .flower {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    pointer-events: none;
+    animation: float 4s infinite ease-in-out;
+  }
+
+  .flower-petal {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background: #d946ef;
+    border-radius: 50%;
+  }
+
+  .flower-center {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    background: #fbbf24;
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+  }
+
+  .side-flower {
+    position: fixed;
+    width: 50px;
+    height: 50px;
+    pointer-events: none;
+    z-index: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    animation: fadeInFlower 1.5s ease-in forwards;
+  }
+
+  @keyframes fadeInFlower {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  .heart {
+    position: fixed;
+    width: 30px;
+    height: 30px;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0;
+    animation: fadeInFlower 1.5s ease-in forwards;
+  }
+
+
+
+  .envelope-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 32px;
+    font-weight: bold;
+    color: #1a64ad;
+    text-align: center;
+    z-index: 5;
+    opacity: 1;
+    transition: opacity 0.6s ease;
+    pointer-events: none;
+  }
+
+  .open .envelope-text {
+    opacity: 0;
+  }
+
+  .girl-image {
+    position: fixed;
+    bottom: 10px;
+    right: 20px;
+    transform: translateX(0);
+    width: 180px;
+    max-width: 20vw;
+    z-index: 1;
+    animation: driftSide 2.5s ease-in-out infinite alternate;
+    pointer-events: none;
+  }
+
+  @keyframes driftSide {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(16px);
+    }
+  }
+
+  .emie-image {
+    position: fixed;
+    top: 10px;
+    left: 20px;
+    transform: translateX(0);
+    width: 180px;
+    max-width: 20vw;
+    z-index: 1;
+    animation: driftSide 2.5s ease-in-out infinite alternate;
+    pointer-events: none;
+  }
+
+  .side-flower-petal {
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+  }
+
+  .side-flower-center {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    background: #fbbf24;
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+    margin: 0;
+    padding: 0;
+  }
+</style>
+</head>
+
+<body>
+
+<div class="envelope" id="envelope">
+  <div class="flap"></div>
+  <div class="envelope-text">Letters for Emie</div>
+<img src="stamp.png" class="stamp">
+  <div class="letter">
+    <div id="text" class="text"></div>
+    <div id="attachments" class="attachments"></div>
+  </div>
+</div>
+
+<div class="menu" id="menu"></div>
+<img src="emie.png" class="emie-image" alt="Emie">
+<img src="girl.png" class="girl-image" alt="Girl">
+
+<script>
+const letters = [
+  {
+    title: "Intro ",
+    content: "Hi Emie,\n\nIm so happy i can reply to You this way!\nI wanted to put as much effort into the letters as i could, becouse as my friend You totally deserve it! I hope You will enjoy my writting.\n\nSending You lots of hugs\nBunny (Alexa)",
+    files: []
+  },
+  {
+    title: "Letter I",
+    content: "Hi Emie,\n\nI hope you're doing well!\nIm so happy to receive your letter! I hope you will be es excited as i am!\nI tried to match the theme of the website with our vibe and i hope i succeded.\n\n<b>Facts about me:</b>\nname:Alexa (in polish its Aleksandra\nage:25 in sept!\nfrom:Poland (but planning to move out to Australia next year).\nfavourite colour:blue, holographic, beige, gold\nhobbies: theatre (watching and directhing), writting drama, reading, photography, cozy games, crocheting and singing.\n\n<b>Currently Im...</b>\n eating my fav chocolate (with walnuts)\ntrying to finish reading Thorne of Glass\ntrying to learn healthy habits\nlooking for a job\nlearning how to play minecraft\nmaking my own beaded bag from scratch\nspending time with my pup\nIm proud of you for working on improving health!\n\n<b>To answear your questions:</b>\n1. How would you describe your version of age regression\n-i think its very cute and cozy and whimsical. Im trying to focuseon doing things that make me happy like dressing up and playing with bubbles. And its full of blue sparkles and rainbows\n2. What are some topics that interest you?\n-mostly theatre and everything related to seas and oceans. I also love mythology and folclore. Im in love with polish fairytales!\n3. What is your facourite time of day?\n-definitelly sunset, especially at the beach\n4. Are you more introverted or extraverted?\n- I think i am ambiverted actually. Depence with who i am with and how im feeling.\n\n<b>I also have some questions for you:</b>\n1. What is your favourite character?\n2. How would your dream agere room look like?\n3. When you were a kid, who did you wanted to be in future?\n\nIm also attaching a coloring page i drew for you <3 I hope you will enjoy it!\n\nThank you for the lovely bracelet! It reminds me of the sea and beach and i love it!\n\nHave the bestest day!\nAlexa",
+    files: [
+      { name: "coloring page.png", url: "coloring page.png" }
+    ]
+  },
+  
+];
+
+const envelope = document.getElementById('envelope');
+const textEl = document.getElementById('text');
+const attachmentsEl = document.getElementById('attachments');
+const menu = document.getElementById('menu');
+
+let currentLetter = 0;
+const loadedLetters = new Array(letters.length).fill(false);
+let typingTimeout = null;
+
+function typeText(text, i = 0) {
+  if (i < text.length) {
+    textEl.innerHTML += text.charAt(i);
+    typingTimeout = setTimeout(() => typeText(text, i + 1), 25);
+  }
+}
+
+function renderAttachments(letter) {
+  attachmentsEl.innerHTML = "";
+  letter.files.forEach(file => {
+    const link = document.createElement("a");
+    link.href = file.url;
+    link.innerText = "Download: " + file.name;
+    link.download = file.name;
+    attachmentsEl.appendChild(link);
+    attachmentsEl.appendChild(document.createElement("br"));
+  });
+}
+
+function displayLetter(index) {
+  const letter = letters[index];
+  textEl.innerHTML = letter.content;
+  renderAttachments(letter);
+}
+
+function loadLetter(index) {
+  if (typingTimeout) {
+    clearTimeout(typingTimeout);
+    typingTimeout = null;
+  }
+
+  if (loadedLetters[index]) {
+    displayLetter(index);
+    return;
+  }
+
+  loadedLetters[index] = true;
+  textEl.innerHTML = "";
+  renderAttachments(letters[index]);
+
+  setTimeout(() => {
+    typeText(letters[index].content);
+  }, 300);
+}
+
+envelope.addEventListener("click", () => {
+  envelope.classList.add("open");
+  loadLetter(currentLetter);
+});
+
+letters.forEach((l, i) => {
+  const btn = document.createElement("button");
+  btn.innerText = l.title;
+
+  btn.onclick = () => {
+    currentLetter = i;
+    envelope.classList.add("open");
+    loadLetter(i);
+  };
+
+  menu.appendChild(btn);
+});
+
+// Color palette for side flowers
+const flowerColors = ['#ec4899', '#f43f5e', '#f97316', '#eab308', '#22c55e', '#06b6d4', '#3b82f6', '#a855f7', '#d946ef'];
+
+// Create colorful side flowers
+function createSideFlower(delay) {
+  setTimeout(() => {
+    const flower = document.createElement("div");
+    flower.className = "side-flower";
+    
+    const color = flowerColors[Math.floor(Math.random() * flowerColors.length)];
+    
+    // Create 5 petals
+    for (let i = 0; i < 5; i++) {
+      const angle = (i * 72) * Math.PI / 180;
+      const petal = document.createElement("div");
+      petal.className = "side-flower-petal";
+      petal.style.background = color;
+      petal.style.top = (25 + 15 * Math.sin(angle)) + "px";
+      petal.style.left = (25 + 15 * Math.cos(angle)) + "px";
+      flower.appendChild(petal);
+    }
+    
+    // Calculate safe zone (avoid envelope area)
+    const envelopeLeft = (window.innerWidth - 920) / 2;
+    const envelopeTop = (window.innerHeight - 640) / 2;
+    const envelopeRight = envelopeLeft + 920;
+    const envelopeBottom = envelopeTop + 640;
+    
+    let randomLeft, randomTop;
+    let isValid = false;
+    
+    // Generate position outside envelope area
+    while (!isValid) {
+      randomLeft = Math.random() * (window.innerWidth - 50);
+      randomTop = Math.random() * (window.innerHeight - 50);
+      
+      // Check if position is outside envelope bounds
+      if (randomLeft + 50 < envelopeLeft || randomLeft > envelopeRight ||
+          randomTop + 50 < envelopeTop || randomTop > envelopeBottom) {
+        isValid = true;
+      }
+    }
+    
+    flower.style.left = randomLeft + 'px';
+    flower.style.top = randomTop + 'px';
+    
+    document.body.appendChild(flower);
+  }, delay);
+}
+
+function createFlowerAt(x, y) {
+  const flower = document.createElement("div");
+  flower.className = "side-flower";
+  
+  const color = flowerColors[Math.floor(Math.random() * flowerColors.length)];
+  for (let i = 0; i < 5; i++) {
+    const angle = (i * 72) * Math.PI / 180;
+    const petal = document.createElement("div");
+    petal.className = "side-flower-petal";
+    petal.style.background = color;
+    petal.style.top = (25 + 15 * Math.sin(angle)) + "px";
+    petal.style.left = (25 + 15 * Math.cos(angle)) + "px";
+    flower.appendChild(petal);
+  }
+  
+  flower.style.left = (x - 25) + 'px';
+  flower.style.top = (y - 25) + 'px';
+  document.body.appendChild(flower);
+  setTimeout(() => {
+    flower.remove();
+  }, 4000);
+}
+
+window.addEventListener('click', (event) => {
+  createFlowerAt(event.clientX, event.clientY);
+});
+
+// Create exactly 20 flowers slowly with staggered appearance
+for (let i = 0; i < 20; i++) {
+  createSideFlower(i * 300);
+}
+</script>
+
+</body>
+</html>
